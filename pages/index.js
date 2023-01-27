@@ -1,115 +1,96 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css';
+import players from '../utils/datasets/players';
+import { Container } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import Button from '@mui/material/Button';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
+import RecipeReviewCard from '../components/custom-card';
+import Match from '../components/match';
 
-export default function Home() {
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
+
+
+
+export async function getStaticProps() {
+  return {
+    props: {
+      players,
+    },
+  };
+}
+
+export  function PlayerListStack({players}) {
   return (
-    <div className={styles.container}>
+    <Box sx={{ width: '100%' }}>
+      <Stack direction="row" spacing={2}>
+        {players.map(player=>{
+          return (<RecipeReviewCard player={player}>{player.apodo}</RecipeReviewCard>)
+        })}
+      </Stack>
+    </Box>
+  );
+}
+
+export function ResponsiveGrid({players, setMatch}) {
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        {players.map((player, index) => (
+          <Grid xs={2} sm={4} md={4} key={index}>
+            <RecipeReviewCard player={player}>{player.apodo}</RecipeReviewCard>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+}
+
+
+async function GenerateMatch(){
+  const match = await fetch('/api/match')
+  console.log(match);
+  const matchJson = await match.json();
+  console.log(matchJson);
+  return matchJson;
+}
+
+
+
+export default function Home({players}) {
+  console.log(players);
+  const  [match, setMatch] = React.useState(null);
+  const generateTeams = async () => {
+    const {match} = await GenerateMatch();
+    setMatch(match)
+    console.log("---------------------------");
+    console.log(match);
+  }
+  return (
+    <Container>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
-
-      <style jsx>{`
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-        footer img {
-          margin-left: 0.5rem;
-        }
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-decoration: none;
-          color: inherit;
-        }
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
+      <Box>
+        <ResponsiveGrid players={players} setMatch={setMatch}/>
+        <Button variant="contained" onClick={generateTeams}>Generar Equipos</Button>
+      </Box>
+      <Box>
+        {match && <Match match={match}/>}
+      </Box>
+    </Container>
   )
 }
