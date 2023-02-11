@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "prinp": "nodemon --exec babel-node ./scripts/insert_players.js"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -11,8 +12,21 @@
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.5",
+    "@mui/x-date-pickers": "^5.0.17",
+    "dayjs": "^1.11.7",
+    "knex": "^2.4.2",
+    "moment": "^2.29.4",
     "next": "latest",
+    "nodemon": "^2.0.20",
+    "objection": "^3.0.1",
+    "pg": "^8.9.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "sqlite3": "^5.1.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.20.2"
   }
 }

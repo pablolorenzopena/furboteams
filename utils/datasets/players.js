@@ -1,15 +1,5 @@
 export default [
   {
-    id: 1,
-    nombre: 'Chato',
-    apodo: 'Chato',
-    posiciones: ['POR'],
-    stats: {
-      attack: 0,
-      deffense: 20
-    }
-  },
-  {
     id: 2,
     nombre: 'Jose Manuel',
     apodo: 'Jose',
@@ -160,6 +150,16 @@ export default [
     }
   },
   {
+    id: 20,
+    nombre: 'DIEGO',
+    apodo: 'DIEGO',
+    posiciones: ['DEL'],
+    stats: {
+      attack: 80,
+      deffense: 20
+    }
+  },
+  {
     id: 17,
     nombre: 'Padilla',
     apodo: 'Padilla',
@@ -174,6 +174,16 @@ export default [
     nombre: 'Raul',
     apodo: 'Raul',
     posiciones: ['ARB'],
+    stats: {
+      attack: 20,
+      deffense: 80
+    }
+  },
+  {
+    id: 22,
+    nombre: 'JACOB',
+    apodo: 'JACOB',
+    posiciones: ['DEF'],
     stats: {
       attack: 20,
       deffense: 80
