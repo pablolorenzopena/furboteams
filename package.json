@@ -7,6 +7,8 @@
     "prinp": "nodemon --exec babel-node ./scripts/insert_players.js"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.0.0",
+    "@auth0/nextjs-auth0": "^2.2.1",
     "@emotion/react": "^11.10.5",
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.5",
@@ -17,11 +19,13 @@
     "knex": "^2.4.2",
     "moment": "^2.29.4",
     "next": "latest",
+    "next-auth": "^4.19.2",
     "nodemon": "^2.0.20",
     "objection": "^3.0.1",
     "pg": "^8.9.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-router-dom": "^6.8.1",
     "sqlite3": "^5.1.4"
   },
   "devDependencies": {

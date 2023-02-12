@@ -33,20 +33,28 @@ import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+import { createTheme, ThemeProvider} from '@mui/material/styles'
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
 
 export function BasicDatePicker() {
   const [value, setValue] = React.useState(null);
 
   return (
-    <Box sx={{backgroundColor: 'white'}}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <Box sx={{ width: '100%', height: '200px', backgroundImage: 'url("header.png")', backgroundPosition: 'bottom', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+      <LocalizationProvider  dateAdapter={AdapterDayjs}>
         <DatePicker
           label="Elije fecha"
           value={value}
+          style={{backgroundColor: '#00000096'}}
           onChange={(newValue) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField {...params} />}
+          renderInput={(params) => <TextField  sx={{color: 'white'}} {...params} />}
         />
       </LocalizationProvider>
     </Box>
@@ -114,7 +122,7 @@ async function GenerateMatch() {
 }
 
 
-
+/* 
 export default function Home({ }) {
   const [players, setPlayers] = React.useState([]);
   const [match, setMatch] = React.useState(null);
@@ -151,7 +159,6 @@ export default function Home({ }) {
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}} > 
             <Box sx={{ display: 'flex', flexFlow: 'column' }} > 
               <BasicDatePicker></BasicDatePicker>
-              {/* <ResponsiveGrid players={players} setMatch={setMatch}/> */}
               <Typography variant="h5">Jugadores</Typography>
               <CheckboxListSecondary players={players}/>
               <Box>
@@ -168,8 +175,102 @@ export default function Home({ }) {
     </React.Fragment>
   )
 }
+ */
+export  function AppContent({ }) {
+  const [players, setPlayers] = React.useState([]);
+  const [match, setMatch] = React.useState(null);
+  React.useEffect(() => {
+
+    const fetchData = async () => {
+      const response = await secureFetch(`/api`, {
+        method: 'GET',
+        headers: { 'Content-type': 'application/json; charset=UTF-8' }
+      });
+      const processedResponse = await response.json();
+      setPlayers(processedResponse.players);
+    }
+    fetchData()
+      .catch(console.error);
+  }, []);
+
+  const generateTeams = async () => {
+    const { match } = await GenerateMatch();
+    setMatch(match)
+    console.log("---------------------------");
+    console.log(match);
+  }
+  return (
+    <React.Fragment>
+      <Box sx={{ width: '100%', flexGrow:1, padding: 0, display: 'flex' }}>
+        <Box sx={{ display: 'flex', flexFlow: 'column', flexGrow: 1, padding: 0 }}>
+          <Head>
+            <title>Create Next App</title>
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+          <Box>
+          <ThemeProvider theme={theme}>
+            <BasicDatePicker></BasicDatePicker>
+          </ThemeProvider>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}} > 
+            <Box sx={{ display: 'flex', flexFlow: 'column' }} > 
+             
+              <Typography variant="h5">Jugadores</Typography>
+              <CheckboxListSecondary players={players}/>
+              <Box>
+                <Typography variant="h5">Invitados</Typography>
+              </Box>
+              <Button variant="contained" onClick={generateTeams}>Generar Equipos</Button>
+            </Box>
+          </Box>
+          <Box>
+            {match && <Match match={match} />}
+          </Box>
+        </Box>
+      </Box>
+    </React.Fragment>
+  )
+}
 
 
+
+import { useUser } from '@auth0/nextjs-auth0/client';
+
+import Layout from '../components/layout';
+
+export default function Home() {
+  const { user, error, isLoading } = useUser();
+
+  return (
+    <Layout>
+      {isLoading && <p>Loading login info...</p>}
+
+      {error && (
+        <>
+          <h4>Error</h4>
+          <pre>{error.message}</pre>
+        </>
+      )}
+
+      {user && (
+        <>
+          <AppContent/>
+        </>
+      )}
+
+      {!isLoading && !error && !user && (
+        <>
+          <p>
+            To test the login click in <i>Login</i>
+          </p>
+          <p>
+            Once you have logged in you should be able to click in <i>Protected Page</i> and <i>Logout</i>
+          </p>
+        </>
+      )}
+    </Layout>
+  );
+}
 
 export function CheckboxListSecondary({players}) {
   const [checked, setChecked] = React.useState([1]);
