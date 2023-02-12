@@ -1,6 +1,6 @@
 import  Player  from '../../models/player';
 const Knex = require('knex');
-const knexConfig = require('../../knexfile');
+const knexConfig = require('../../knex/knexfile');
 
 const { Model } = require('objection');
 console.log(Player)

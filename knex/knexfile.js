@@ -7,7 +7,7 @@ module.exports = {
   client: 'sqlite3', // or 'better-sqlite3'
   useNullAsDefault: true,
   connection: {
-    filename: path.resolve('./mydb.sqlite')
+    filename: path.resolve('./database/mydb.sqlite')
   },
   migrations: {
     directory: './knex/migrations',

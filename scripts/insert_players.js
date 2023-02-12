@@ -1,7 +1,7 @@
 'use strict';
 import players from '../utils/datasets/players';
 const Knex = require('knex');
-const knexConfig = require('../knexfile');
+const knexConfig = require('../knex/knexfile');
 
 const { Model } = require('objection');
 import  Player  from '../models/player';
