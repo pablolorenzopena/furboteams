@@ -50,7 +50,6 @@ export function BasicDatePicker() {
         <DatePicker
           label="Elije fecha"
           value={value}
-          style={{backgroundColor: '#00000096'}}
           onChange={(newValue) => {
             setValue(newValue);
           }}
@@ -213,7 +212,7 @@ export  function AppContent({ }) {
           </ThemeProvider>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}} > 
-            <Box sx={{ display: 'flex', flexFlow: 'column' }} > 
+            <Box sx={{ display: 'flex',flexGrow: 1, flexFlow: 'column' }} > 
              
               <Typography variant="h5">Jugadores</Typography>
               <CheckboxListSecondary players={players}/>
@@ -289,7 +288,7 @@ export function CheckboxListSecondary({players}) {
   };
 
   return (
-    <List dense sx={{ width: '100%', maxWidth: 360, maxHeight: 300, overflow: 'auto', bgcolor: 'background.paper', color: 'black' }}>
+    <List dense sx={{ width: '100%', maxWidth: 660, maxHeight: 300, overflow: 'auto', bgcolor: 'background.paper', color: 'black' }}>
       {players.map((value) => {
         const labelId = `checkbox-list-secondary-label-${value.id}`;
         return (
