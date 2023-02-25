@@ -32,7 +32,6 @@ import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-
 import { createTheme, ThemeProvider} from '@mui/material/styles'
 const theme = createTheme({
   palette: {
@@ -198,35 +197,48 @@ export  function AppContent({ }) {
     console.log("---------------------------");
     console.log(match);
   }
+
+  const addPlayers = async () => {
+    const selectedPlayers = players.filter(player => {
+      if (player.isChecked) {
+        return player;
+      }
+    })
+    console.log(selectedPlayers);
+  }
+
   return (
     <React.Fragment>
-      <Box sx={{ width: '100%', flexGrow:1, padding: 0, display: 'flex' }}>
-        <Box sx={{ display: 'flex', flexFlow: 'column', flexGrow: 1, padding: 0 }}>
-          <Head>
+      <Head>
             <title>Create Next App</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
+      <Container sx={{flex: '1 1 auto', overflowY: 'auto', minHeight: '100px', display: 'flex', p:0, flexGrow: 1}}>
+        <Box sx={{ display: 'flex', flexFlow: 'column', padding: 0, flexGrow: 1 }}>
           <Box>
-          <ThemeProvider theme={theme}>
-            <BasicDatePicker></BasicDatePicker>
-          </ThemeProvider>
+            <ThemeProvider theme={theme}>
+              <BasicDatePicker></BasicDatePicker>
+            </ThemeProvider>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}} > 
-            <Box sx={{ display: 'flex',flexGrow: 1, flexFlow: 'column' }} > 
+          <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column' , flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} > 
              
               <Typography variant="h5">Jugadores</Typography>
               <CheckboxListSecondary players={players}/>
-              <Box>
+              
+              
+              {/* <Button variant="contained" onClick={generateTeams}>Generar Equipos</Button> */}
+              {/* <Box>
                 <Typography variant="h5">Invitados</Typography>
-              </Box>
-              <Button variant="contained" onClick={generateTeams}>Generar Equipos</Button>
+              </Box> */}
+          </Box>
+          <Box sx={{display: 'flex'}}>
+                <Button sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
             </Box>
-          </Box>
-          <Box>
+          {/* <Box>
             {match && <Match match={match} />}
-          </Box>
+          </Box> */}
         </Box>
-      </Box>
+      </Container>
     </React.Fragment>
   )
 }
@@ -271,34 +283,24 @@ export default function Home() {
   );
 }
 
-export function CheckboxListSecondary({players}) {
-  const [checked, setChecked] = React.useState([1]);
-
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+function PlayerItem({player}) {
+  const [checked, setChecked] = React.useState(player.isChecked? player.isChecked : false);
+  const labelId = `checkbox-list-secondary-label-${player.id}`;
+  const handleToggle = (value) => () => { 
+    console.log(value);
+    console.log(checked);
+    player.isChecked = !checked;
+    setChecked(!checked);
+    console.log(player);
   };
-
   return (
-    <List dense sx={{ width: '100%', maxWidth: 660, maxHeight: 300, overflow: 'auto', bgcolor: 'background.paper', color: 'black' }}>
-      {players.map((value) => {
-        const labelId = `checkbox-list-secondary-label-${value.id}`;
-        return (
-          <ListItem
-            key={value.id}
+    <ListItem
+            key={player.id}
             secondaryAction={
               <Checkbox
                 edge="end"
-                onChange={handleToggle(value.id)}
-                checked={checked.indexOf(value.id) !== -1}
+                onChange={handleToggle(player)}
+                checked={checked}
                 inputProps={{ 'aria-labelledby': labelId }}
               />
             }
@@ -307,13 +309,25 @@ export function CheckboxListSecondary({players}) {
             <ListItemButton>
               <ListItemAvatar>
                 <Avatar
-                  alt={`${value.apodo}`}
+                  alt={`${player.apodo}`}
                 />
               </ListItemAvatar>
-              <ListItemText id={labelId} primary={value.apodo} />
-              <ToggleButtons/>
+              <ListItemText id={labelId} primary={player.apodo} />
+              <ToggleButtons player={player}/>
             </ListItemButton>
           </ListItem>
+  )
+}
+
+
+export function CheckboxListSecondary({players}) {
+ 
+  return (
+    <List dense sx={{ width: '100%', maxWidth: 660, flexGrow: 1, overflow: 'auto', bgcolor: 'background.paper', color: 'black', flex: '1 1 auto', overflowY: 'auto', minHeight: '100px'}}>
+      {players.map((value) => {
+        
+        return (
+          <PlayerItem player={value}/>
         );
       })}
     </List>
@@ -323,11 +337,12 @@ export function CheckboxListSecondary({players}) {
 
 
 
-export function ToggleButtons() {
-  const [alignment, setAlignment] = React.useState('left');
-  const posiciones = ['POR', 'DEF', 'MED', 'DEL'];
+export function ToggleButtons({player}) {
+  const [alignment, setAlignment] = React.useState(JSON.parse(player.posiciones)[0]);
+  const posiciones = ['POR', 'DEF', 'MID', 'DEL', 'ARB'];
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
+    
   };
 
   return (
