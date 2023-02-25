@@ -13,7 +13,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 export default function ButtonAppBar() {
   const { user } = useUser();
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box >
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
