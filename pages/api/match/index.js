@@ -1,5 +1,11 @@
 export default function handler(req, res) {
-  
+  console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+  console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+  console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+  console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+  console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
+  console.log(req.body);
 
 const randomValue = (list) => {
   return list[Math.floor(Math.random() * list.length)]
@@ -210,148 +216,7 @@ const players =  [
 
 const match = {
   date: null,
-  convocados: [
-    {
-      id: 1,
-      nombre: 'Chato',
-      apodo: 'Chato',
-      posiciones: ['POR'],
-      stats: {
-        attack: 0,
-        deffense: 20
-      }
-    },
-    {
-      id: 17,
-      nombre: 'DIEGO',
-      apodo: 'DIEGO',
-      posiciones: ['DEL'],
-      stats: {
-        attack: 80,
-        deffense: 20
-      }
-    },
-    {
-      id: 15,
-      nombre: 'Fernando',
-      apodo: 'Fernando',
-      posiciones: ['MID'],
-      stats: {
-        attack: 40,
-        deffense: 60
-      }
-    },
-    {
-      id: 3,
-      nombre: 'Manuel',
-      apodo: 'Manuel',
-      posiciones: ['DEF'],
-      stats: {
-        attack: 30,
-        deffense: 70
-      }
-    },
-    {
-      id: 4,
-      nombre: 'JAIME',
-      apodo: 'JAIME',
-      posiciones: ['DEF'],
-      stats: {
-        attack: 0,
-        deffense: 20
-      }
-    },
-    {
-      id: 5,
-      nombre: 'RAFA',
-      apodo: 'RAFA',
-      posiciones: ['DEF'],
-      stats: {
-        attack: 30,
-        deffense: 70
-      }
-    },
-    {
-      id: 6,
-      nombre: 'Duran',
-      apodo: 'Duran',
-      posiciones: ['DEF'],
-      stats: {
-        attack: 40,
-        deffense: 60
-      }
-    },
-    {
-      id: 7,
-      nombre: 'Antonio',
-      apodo: 'Antonio',
-      posiciones: ['MID'],
-      stats: {
-        attack: 60,
-        deffense: 40
-      }
-    },
-    {
-      id: 8,
-      nombre: 'Pablo',
-      apodo: 'Pablo',
-      posiciones: ['DEF'],
-      stats: {
-        attack: 20,
-        deffense: 80
-      }
-    },
-    {
-      id: 9,
-      nombre: 'Cristian',
-      apodo: 'Cristian',
-      posiciones: ['DEF'],
-      stats: {
-        attack: 50,
-        deffense: 50
-      }
-    },
-    {
-      id: 10,
-      nombre: 'Oscar',
-      apodo: 'Oscar',
-      posiciones: ['POR'],
-      stats: {
-        attack: 40,
-        deffense: 60
-      }
-    },
-    {
-      id: 11,
-      nombre: 'Alex',
-      apodo: 'Alex',
-      posiciones: ['MID'],
-      stats: {
-        attack: 50,
-        deffense: 50
-      }
-    },
-    {
-      id: 12,
-      nombre: 'Luis',
-      apodo: 'Luis',
-      posiciones: ['MID'],
-      stats: {
-        attack: 60,
-        deffense: 40
-      }
-    },
-    {
-      id: 20,
-      nombre: 'Malagon',
-      apodo: 'Malagon',
-      posiciones: ['MID'],
-      stats: {
-        attack: 60,
-        deffense: 40
-      }
-    },
-  ],
+  convocados: JSON.parse(req.body),
   teams: {
     red: [],
     blue: []
@@ -446,7 +311,7 @@ console.log(match.teams);
 
 console.log("------------------------------------------");
 
-let blueAttackScore =  0;
+/* let blueAttackScore =  0;
 let blueDeffenseScore = 0; 
 match.teams.blue.map(player => {
   blueAttackScore += player.stats.attack;
@@ -467,7 +332,7 @@ console.log(match.teams.blue);
 
 console.log("RED ATTACK:", redAttackScore);
 console.log("RED DEFENSE:", redDeffenseScore);
-console.log(match.teams.red);
+console.log(match.teams.red); */
 
 
 
