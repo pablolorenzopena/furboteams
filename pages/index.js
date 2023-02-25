@@ -117,8 +117,8 @@ export function ResponsiveGrid({ players, setMatch }) {
 }
 
 
-async function GenerateMatch() {
-  const match = await fetch('/api/match')
+async function GenerateMatch({selectedPlayers}) {
+  const match = await fetch('/api/match',  {method: 'POST', body: JSON.stringify(selectedPlayers)});
   console.log(match);
   const matchJson = await match.json();
   console.log(matchJson);
@@ -222,7 +222,7 @@ export  function AppContent({ }) {
   }, []);
 
   const generateTeams = async () => {
-    const { match } = await GenerateMatch();
+    const { match } = await GenerateMatch({selectedPlayers});
     setMatch(match)
     console.log("---------------------------");
     console.log(match);
@@ -237,10 +237,24 @@ export  function AppContent({ }) {
     console.log(selectedPlayers);
     setSelectedPlayers(selectedPlayers);
   }
-  const [age, setAge] = React.useState('');
-
+  const [position, setPosition] = React.useState('');
+  const [name, setName] = React.useState('');
+  const addInv = (event) => {
+    setSelectedPlayers([{
+      id: selectedPlayers.length + 1,
+      nombre: name,
+      apodo: name,
+      position: position
+    }, ...selectedPlayers])
+    setPosition('');
+    setName('');
+    console.log(selectedPlayers);
+  }
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setPosition(event.target.value);
+  };
+  const handleChangeName = (event) => {
+    setName(event.target.value);
   };
   return (
     <React.Fragment>
@@ -255,7 +269,7 @@ export  function AppContent({ }) {
               <BasicDatePicker></BasicDatePicker>
             </ThemeProvider>
           </Box>
-          {!selectedPlayers &&
+          {!selectedPlayers && !match &&
           <>
           <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column' , flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} > 
              
@@ -263,7 +277,7 @@ export  function AppContent({ }) {
               <CheckboxListSecondary players={players}/>
               
               
-              {/* <Button variant="contained" onClick={generateTeams}>Generar Equipos</Button> */}
+              {/*  */}
               {/* <Box>
                 <Typography variant="h5">Invitados</Typography>
               </Box> */}
@@ -273,29 +287,37 @@ export  function AppContent({ }) {
             </Box>
             </>
             }
-          {selectedPlayers &&
+          {selectedPlayers && !match &&
              <>
              <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column' , flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} > 
                 
                  <ListOfPlayer players={selectedPlayers}>
 
                  </ListOfPlayer>
+                 <Box sx={{display: 'flex', flexFlow: 'column'}}>
+                 <Typography variant="h5">Añadir Invitado</Typography>
+                 <TextField onChange={handleChangeName} valie={name} id="filled-basic" label="Filled" variant="filled" />
                  <Box sx={{display: 'flex'}}>
-                 <TextField id="filled-basic" label="Filled" variant="filled" />
                  <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={age}
-          label="Age"
-          onChange={handleChange}
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={position}
+                    sx={{minWidth: '300px'}}
+                    label="Nombre"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={'POR'}>POR</MenuItem>
+                    <MenuItem value={'DEF'}>DEF</MenuItem>
+                    <MenuItem value={'MID'}>MID</MenuItem>
+                    <MenuItem value={'DEL'}>DEL</MenuItem>
+                  </Select>
+                  <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Button sx={{width:'100%'}} variant="contained" onClick={addInv}>Añadir</Button>
+                  </Box>
+                  </Box>
             </Box>
                  <Box sx={{display: 'flex'}}>
-                <Button sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
+                 <Button variant="contained" onClick={generateTeams}>Generar Equipos</Button>
             </Box>
              </Box>
              {/* <Box sx={{display: 'flex'}}>
@@ -303,9 +325,9 @@ export  function AppContent({ }) {
                </Box> */}
                </>
           }
-          {/* <Box>
+          <Box>
             {match && <Match match={match} />}
-          </Box> */}
+          </Box>
         </Box>
       </Container>
     </React.Fragment>
