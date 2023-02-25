@@ -11,17 +11,19 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import RecipeReviewCard from '../components/custom-card';
 import Match from '../components/match';
+import TextField from '@mui/material/TextField';
+
 import { secureFetch } from '../utils/fetcher';
 import Image from 'next/image'
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListSubheader from '@mui/material/ListSubheader';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Checkbox from '@mui/material/Checkbox';
 import Avatar from '@mui/material/Avatar';
 import {Typography} from '@mui/material';
-import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -33,6 +35,10 @@ import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { createTheme, ThemeProvider} from '@mui/material/styles'
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 const theme = createTheme({
   palette: {
     mode: 'dark',
@@ -174,9 +180,33 @@ export default function Home({ }) {
   )
 }
  */
+
+function ListOfPlayer({players}) {
+  console.log(players);
+  return (
+    <List
+      sx={{ width: '100%', display: 'flex', flexFlow: 'column',overflowY: 'auto', bgcolor: 'background.paper' }}
+      component="nav"
+      aria-labelledby="nested-list-subheader"
+      subheader={
+        <ListSubheader sx={{backgroundColor: 'blue', color: 'white'}} component="div" id="nested-list-subheader">
+          Convocados
+        </ListSubheader>
+      }
+    >
+      {players.filter(player => {
+       /*  if (player.posiciones.indexOf('POR') !== -1) {
+          return player
+        } */
+        return player;
+      }).map((player)=> <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
+    </List>
+  )
+}
 export  function AppContent({ }) {
   const [players, setPlayers] = React.useState([]);
   const [match, setMatch] = React.useState(null);
+  const [selectedPlayers, setSelectedPlayers] = React.useState(null);
   React.useEffect(() => {
 
     const fetchData = async () => {
@@ -205,8 +235,13 @@ export  function AppContent({ }) {
       }
     })
     console.log(selectedPlayers);
+    setSelectedPlayers(selectedPlayers);
   }
+  const [age, setAge] = React.useState('');
 
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
   return (
     <React.Fragment>
       <Head>
@@ -220,6 +255,8 @@ export  function AppContent({ }) {
               <BasicDatePicker></BasicDatePicker>
             </ThemeProvider>
           </Box>
+          {!selectedPlayers &&
+          <>
           <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column' , flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} > 
              
               <Typography variant="h5">Jugadores</Typography>
@@ -234,6 +271,38 @@ export  function AppContent({ }) {
           <Box sx={{display: 'flex'}}>
                 <Button sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
             </Box>
+            </>
+            }
+          {selectedPlayers &&
+             <>
+             <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column' , flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} > 
+                
+                 <ListOfPlayer players={selectedPlayers}>
+
+                 </ListOfPlayer>
+                 <Box sx={{display: 'flex'}}>
+                 <TextField id="filled-basic" label="Filled" variant="filled" />
+                 <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Age"
+          onChange={handleChange}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+            </Box>
+                 <Box sx={{display: 'flex'}}>
+                <Button sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
+            </Box>
+             </Box>
+             {/* <Box sx={{display: 'flex'}}>
+                   <Button sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
+               </Box> */}
+               </>
+          }
           {/* <Box>
             {match && <Match match={match} />}
           </Box> */}
