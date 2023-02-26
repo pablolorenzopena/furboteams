@@ -15,18 +15,7 @@ export default function Match({match}) {
   return (
     <React.Fragment>
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Equipos
-        </ListSubheader>
-      }
-    >
-    </List>
-    <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: '100%',  bgcolor: 'background.paper' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
@@ -64,7 +53,7 @@ export default function Match({match}) {
       }).map((player)=> <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
       </List>
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: '100%', bgcolor: 'background.paper' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={

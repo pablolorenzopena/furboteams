@@ -53,12 +53,13 @@ export function BasicDatePicker() {
     <Box sx={{ width: '100%', height: '200px', backgroundImage: 'url("header.png")', backgroundPosition: 'bottom', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
       <LocalizationProvider  dateAdapter={AdapterDayjs}>
         <DatePicker
+          inputFormat="DD/MM/YYYY"
           label="Elije fecha"
           value={value}
           onChange={(newValue) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField  sx={{color: 'white'}} {...params} />}
+          renderInput={(params) => <TextField  sx={{color: 'white', backgroundColor: 'rgba(0,0,0,.5)'}} {...params} />}
         />
       </LocalizationProvider>
     </Box>
@@ -433,7 +434,7 @@ export function ToggleButtons({player}) {
   const posiciones = ['POR', 'DEF', 'MID', 'DEL', 'ARB'];
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
-    
+    player.posiciones =  JSON.stringify([newAlignment]);
   };
 
   return (
