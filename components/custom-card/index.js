@@ -14,7 +14,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-
+import player1 from '../../public/player1.png';
+console.log("###################################");
+console.log(player1)
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -37,7 +39,7 @@ export default function RecipeReviewCard({player}) {
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar src={player1.src} sx={{ bgcolor: red[500] }} aria-label="recipe">
             R
           </Avatar>
         }

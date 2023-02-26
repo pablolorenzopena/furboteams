@@ -36,7 +36,7 @@ export default function ButtonAppBar() {
   }
   return (
     <Box >
-      <AppBar sx={{bgcolor:'#04644e'}} elevation={true} position="static">
+      <AppBar sx={{bgcolor:'#04644e'}} elevation={2} position="static">
         <Toolbar>
         <Box
             component="img"
