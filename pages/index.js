@@ -38,6 +38,10 @@ import { createTheme, ThemeProvider} from '@mui/material/styles'
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import exportAsImage from '../utils/exportImageAs';
+import player1 from '../public/player1.png';
+
+import player2 from '../public/player2.png';
 
 const theme = createTheme({
   palette: {
@@ -205,6 +209,7 @@ function ListOfPlayer({players}) {
   )
 }
 export  function AppContent({ }) {
+  const exportRef = React.useRef();
   const [players, setPlayers] = React.useState([]);
   const [match, setMatch] = React.useState(null);
   const [selectedPlayers, setSelectedPlayers] = React.useState(null);
@@ -241,11 +246,33 @@ export  function AppContent({ }) {
   const [position, setPosition] = React.useState('');
   const [name, setName] = React.useState('');
   const addInv = (event) => {
+    let attack = 0;
+    let defense = 0;
+    switch(position) {
+      case 'POR':
+        defense = 100;
+        attack = 0;
+        break;
+      case 'MID':
+        defense = 40;
+        attack = 60;
+        break;
+      case 'DEF':
+        defense = 60;
+        attack = 40;
+        break;
+      case 'DEL':
+        defense = 20;
+        attack = 80;
+        break
+    }
     setSelectedPlayers([{
       id: selectedPlayers.length + 1,
       nombre: name,
       apodo: name,
-      position: position
+      ataque: attack,
+      defensa: defense,
+      posiciones: JSON.stringify(position)
     }, ...selectedPlayers])
     setPosition('');
     setName('');
@@ -274,7 +301,7 @@ export  function AppContent({ }) {
           <>
           <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column' , flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} > 
              
-              <Typography variant="h5">Jugadores</Typography>
+              <Typography sx={{padding: '8px', bgColor: '#04644e', color: 'white'}} variant="h5">Jugadores</Typography>
               <CheckboxListSecondary players={players}/>
               
               
@@ -284,7 +311,7 @@ export  function AppContent({ }) {
               </Box> */}
           </Box>
           <Box sx={{display: 'flex'}}>
-                <Button sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
+                <Button color="success" sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
             </Box>
             </>
             }
@@ -312,22 +339,27 @@ export  function AppContent({ }) {
                     <MenuItem value={'MID'}>MID</MenuItem>
                     <MenuItem value={'DEL'}>DEL</MenuItem>
                   </Select>
-                  <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <Box sx={{display: 'flex'}}>
                     <Button sx={{width:'100%'}} variant="contained" onClick={addInv}>Añadir</Button>
                   </Box>
                   </Box>
             </Box>
                  <Box sx={{display: 'flex'}}>
-                 <Button variant="contained" onClick={generateTeams}>Generar Equipos</Button>
-            </Box>
+                   <Button sx={{flexGrow:1}} variant="contained" onClick={generateTeams}>Generar Equipos</Button>
+                </Box>
              </Box>
              {/* <Box sx={{display: 'flex'}}>
                    <Button sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
                </Box> */}
                </>
           }
-          <Box>
-            {match && <Match match={match} />}
+          <Box ref={exportRef}>
+            {match && 
+            <>
+              <Match match={match} />
+              <Button onClick={() => exportAsImage(exportRef.current, "test")}>Imagen</Button>
+            </>
+            }
           </Box>
         </Box>
       </Container>
@@ -388,6 +420,7 @@ function PlayerItem({player}) {
   return (
     <ListItem
             key={player.id}
+            divider={true}
             secondaryAction={
               <Checkbox
                 edge="end"
@@ -401,6 +434,8 @@ function PlayerItem({player}) {
             <ListItemButton>
               <ListItemAvatar>
                 <Avatar
+                  sx={{backgroundColor:'red'}}
+                  src={player2.src}
                   alt={`${player.apodo}`}
                 />
               </ListItemAvatar>

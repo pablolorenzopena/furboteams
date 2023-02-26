@@ -16,6 +16,7 @@
     "@mui/material": "^5.11.5",
     "@mui/x-date-pickers": "^5.0.17",
     "dayjs": "^1.11.7",
+    "html2canvas": "^1.4.1",
     "knex": "^2.4.2",
     "moment": "^2.29.4",
     "next": "latest",
