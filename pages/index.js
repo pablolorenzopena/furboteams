@@ -23,7 +23,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Checkbox from '@mui/material/Checkbox';
 import Avatar from '@mui/material/Avatar';
-import {Typography} from '@mui/material';
+import { Typography } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -34,11 +34,13 @@ import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { createTheme, ThemeProvider} from '@mui/material/styles'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import exportAsImage from '../utils/exportImageAs';
+import PlayerListAdmin from '../components/admin/player-list';
+import RemovePlayerDialog from '../components/dialogs/remove-player';
 import player1 from '../public/player1.png';
 
 import player2 from '../public/player2.png';
@@ -54,8 +56,8 @@ export function BasicDatePicker() {
   const [value, setValue] = React.useState(null);
 
   return (
-    <Box sx={{ width: '100%', height: '200px', backgroundImage: 'url("header.png")', backgroundPosition: 'bottom', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-      <LocalizationProvider  dateAdapter={AdapterDayjs}>
+    <Box sx={{ width: '100%', height: '200px', backgroundImage: 'url("header.png")', backgroundPosition: 'bottom', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           inputFormat="DD/MM/YYYY"
           label="Elije fecha"
@@ -63,7 +65,7 @@ export function BasicDatePicker() {
           onChange={(newValue) => {
             setValue(newValue);
           }}
-          renderInput={(params) => <TextField  sx={{color: 'white', backgroundColor: 'rgba(0,0,0,.5)'}} {...params} />}
+          renderInput={(params) => <TextField sx={{ color: 'white', backgroundColor: 'rgba(0,0,0,.5)' }} {...params} />}
         />
       </LocalizationProvider>
     </Box>
@@ -122,8 +124,8 @@ export function ResponsiveGrid({ players, setMatch }) {
 }
 
 
-async function GenerateMatch({selectedPlayers}) {
-  const match = await fetch('/api/match',  {method: 'POST', body: JSON.stringify(selectedPlayers)});
+async function GenerateMatch({ selectedPlayers }) {
+  const match = await fetch('/api/match', { method: 'POST', body: JSON.stringify(selectedPlayers) });
   console.log(match);
   const matchJson = await match.json();
   console.log(matchJson);
@@ -186,33 +188,35 @@ export default function Home({ }) {
 }
  */
 
-function ListOfPlayer({players}) {
+function ListOfPlayer({ players }) {
   console.log(players);
   return (
     <List
-      sx={{ width: '100%', display: 'flex', flexFlow: 'column',overflowY: 'auto', bgcolor: 'background.paper' }}
+      sx={{ width: '100%', display: 'flex', flexFlow: 'column', overflowY: 'auto', bgcolor: 'background.paper' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
-        <ListSubheader sx={{backgroundColor: 'blue', color: 'white'}} component="div" id="nested-list-subheader">
+        <ListSubheader sx={{ backgroundColor: 'blue', color: 'white' }} component="div" id="nested-list-subheader">
           Convocados
         </ListSubheader>
       }
     >
       {players.filter(player => {
-       /*  if (player.posiciones.indexOf('POR') !== -1) {
-          return player
-        } */
+        /*  if (player.posiciones.indexOf('POR') !== -1) {
+           return player
+         } */
         return player;
-      }).map((player)=> <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
+      }).map((player) => <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
     </List>
   )
 }
-export  function AppContent({ }) {
+export function AppContent({ mode, setMode }) {
   const exportRef = React.useRef();
   const [players, setPlayers] = React.useState([]);
   const [match, setMatch] = React.useState(null);
   const [selectedPlayers, setSelectedPlayers] = React.useState(null);
+  const [selectedPlayer, setSelectedPlayer] = React.useState(null);
+  const [openRemove, setOpenRemove] = React.useState(false);
   React.useEffect(() => {
 
     const fetchData = async () => {
@@ -228,7 +232,7 @@ export  function AppContent({ }) {
   }, []);
 
   const generateTeams = async () => {
-    const { match } = await GenerateMatch({selectedPlayers});
+    const { match } = await GenerateMatch({ selectedPlayers });
     setMatch(match)
     console.log("---------------------------");
     console.log(match);
@@ -248,7 +252,7 @@ export  function AppContent({ }) {
   const addInv = (event) => {
     let attack = 0;
     let defense = 0;
-    switch(position) {
+    switch (position) {
       case 'POR':
         defense = 100;
         attack = 0;
@@ -284,13 +288,24 @@ export  function AppContent({ }) {
   const handleChangeName = (event) => {
     setName(event.target.value);
   };
+
+  const removePlayer = (player) => {
+    console.log(player);
+  }
+
+  const openRemovePlayer = (player) => {
+    setSelectedPlayer(player)
+    setOpenRemove(true);
+  }
+
   return (
     <React.Fragment>
       <Head>
-            <title>Create Next App</title>
-            <link rel="icon" href="/favicon.ico" />
-          </Head>
-      <Container sx={{flex: '1 1 auto', overflowY: 'auto', minHeight: '100px', display: 'flex', p:0, flexGrow: 1}}>
+        <title>Create Next App</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Container sx={{ flex: '1 1 auto', overflowY: 'auto', minHeight: '100px', display: 'flex', p: 0, flexGrow: 1 }}>
+       {mode === 'match' && 
         <Box sx={{ display: 'flex', flexFlow: 'column', padding: 0, flexGrow: 1 }}>
           <Box>
             <ThemeProvider theme={theme}>
@@ -298,71 +313,79 @@ export  function AppContent({ }) {
             </ThemeProvider>
           </Box>
           {!selectedPlayers && !match &&
-          <>
-          <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column' , flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} > 
-             
-              <Typography sx={{padding: '8px', bgColor: '#04644e', color: 'white'}} variant="h5">Jugadores</Typography>
-              <CheckboxListSecondary players={players}/>
-              
-              
-              {/*  */}
-              {/* <Box>
+            <>
+              <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column', flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} >
+
+                <Typography sx={{ padding: '8px', backgroundColor: '#04644e', color: 'white' }} variant="h5">Jugadores</Typography>
+                <CheckboxListSecondary players={players} />
+
+
+                {/*  */}
+                {/* <Box>
                 <Typography variant="h5">Invitados</Typography>
               </Box> */}
-          </Box>
-          <Box sx={{display: 'flex'}}>
-                <Button color="success" sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
-            </Box>
+              </Box>
+              <Box sx={{ display: 'flex' }}>
+                <Button color="success" sx={{ width: '100%' }} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
+              </Box>
             </>
-            }
+          }
           {selectedPlayers && !match &&
-             <>
-             <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column' , flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} > 
-                
-                 <ListOfPlayer players={selectedPlayers}>
+            <>
+              <Box sx={{ display: 'flex', flexShrink: 1, flexFlow: 'column', flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }} >
 
-                 </ListOfPlayer>
-                 <Box sx={{display: 'flex', flexFlow: 'column'}}>
-                 <Typography variant="h5">Añadir Invitado</Typography>
-                 <TextField onChange={handleChangeName} valie={name} id="filled-basic" label="Filled" variant="filled" />
-                 <Box sx={{display: 'flex'}}>
-                 <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={position}
-                    sx={{minWidth: '300px'}}
-                    label="Nombre"
-                    onChange={handleChange}
-                  >
-                    <MenuItem value={'POR'}>POR</MenuItem>
-                    <MenuItem value={'DEF'}>DEF</MenuItem>
-                    <MenuItem value={'MID'}>MID</MenuItem>
-                    <MenuItem value={'DEL'}>DEL</MenuItem>
-                  </Select>
-                  <Box sx={{display: 'flex'}}>
-                    <Button sx={{width:'100%'}} variant="contained" onClick={addInv}>Añadir</Button>
+                <ListOfPlayer players={selectedPlayers}>
+
+                </ListOfPlayer>
+                <Box sx={{ display: 'flex', flexFlow: 'column' }}>
+                  <Typography variant="h5">Añadir Invitado</Typography>
+                  <TextField onChange={handleChangeName} valie={name} id="filled-basic" label="Filled" variant="filled" />
+                  <Box sx={{ display: 'flex' }}>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={position}
+                      sx={{ minWidth: '300px' }}
+                      label="Nombre"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={'POR'}>POR</MenuItem>
+                      <MenuItem value={'DEF'}>DEF</MenuItem>
+                      <MenuItem value={'MID'}>MID</MenuItem>
+                      <MenuItem value={'DEL'}>DEL</MenuItem>
+                    </Select>
+                    <Box sx={{ display: 'flex' }}>
+                      <Button sx={{ width: '100%' }} variant="contained" onClick={addInv}>Añadir</Button>
+                    </Box>
                   </Box>
-                  </Box>
-            </Box>
-                 <Box sx={{display: 'flex'}}>
-                   <Button sx={{flexGrow:1}} variant="contained" onClick={generateTeams}>Generar Equipos</Button>
                 </Box>
-             </Box>
-             {/* <Box sx={{display: 'flex'}}>
+                <Box sx={{ display: 'flex' }}>
+                  <Button sx={{ flexGrow: 1 }} variant="contained" onClick={generateTeams}>Generar Equipos</Button>
+                </Box>
+              </Box>
+              {/* <Box sx={{display: 'flex'}}>
                    <Button sx={{width:'100%'}} variant="contained" onClick={addPlayers}>Añadir Jugadores</Button>
                </Box> */}
-               </>
+            </>
           }
           <Box ref={exportRef}>
-            {match && 
-            <>
-              <Match match={match} />
-              <Button onClick={() => exportAsImage(exportRef.current, "test")}>Imagen</Button>
-            </>
+            {match &&
+              <>
+                <Match match={match} />
+                <Button onClick={() => exportAsImage(exportRef.current, "test")}>Imagen</Button>
+              </>
             }
           </Box>
         </Box>
+       }
+       {mode === 'admin' && 
+        <Box sx={{ display: 'flex', flexFlow: 'column', padding: 0, flexGrow: 1 }}>
+          <PlayerListAdmin players={players} removeItemAction={openRemovePlayer}/>
+          
+        </Box>
+      }
       </Container>
+      <RemovePlayerDialog open={openRemove} setOpen={setOpenRemove} player={selectedPlayer}  handleRemoveItem={removePlayer}></RemovePlayerDialog>
     </React.Fragment>
   )
 }
@@ -375,9 +398,9 @@ import Layout from '../components/layout';
 
 export default function Home() {
   const { user, error, isLoading } = useUser();
-
+  const [ mode, setMode] = React.useState('match');
   return (
-    <Layout>
+    <Layout mode={mode} setMode={setMode}>
       {isLoading && <p>Loading login info...</p>}
 
       {error && (
@@ -389,7 +412,7 @@ export default function Home() {
 
       {user && (
         <>
-          <AppContent/>
+          <AppContent mode={mode} setMode={setMode} />
         </>
       )}
 
@@ -407,10 +430,10 @@ export default function Home() {
   );
 }
 
-function PlayerItem({player}) {
-  const [checked, setChecked] = React.useState(player.isChecked? player.isChecked : false);
+function PlayerItem({ player }) {
+  const [checked, setChecked] = React.useState(player.isChecked ? player.isChecked : false);
   const labelId = `checkbox-list-secondary-label-${player.id}`;
-  const handleToggle = (value) => () => { 
+  const handleToggle = (value) => () => {
     console.log(value);
     console.log(checked);
     player.isChecked = !checked;
@@ -419,42 +442,42 @@ function PlayerItem({player}) {
   };
   return (
     <ListItem
-            key={player.id}
-            divider={true}
-            secondaryAction={
-              <Checkbox
-                edge="end"
-                onChange={handleToggle(player)}
-                checked={checked}
-                inputProps={{ 'aria-labelledby': labelId }}
-              />
-            }
-            disablePadding
-          >
-            <ListItemButton>
-              <ListItemAvatar>
-                <Avatar
-                  sx={{backgroundColor:'red'}}
-                  src={player2.src}
-                  alt={`${player.apodo}`}
-                />
-              </ListItemAvatar>
-              <ListItemText id={labelId} primary={player.apodo} />
-              <ToggleButtons player={player}/>
-            </ListItemButton>
-          </ListItem>
+      key={player.id}
+      divider={true}
+      secondaryAction={
+        <Checkbox
+          edge="end"
+          onChange={handleToggle(player)}
+          checked={checked}
+          inputProps={{ 'aria-labelledby': labelId }}
+        />
+      }
+      disablePadding
+    >
+      <ListItemButton>
+        <ListItemAvatar>
+          <Avatar
+            sx={{ backgroundColor: '#e0e0e0' }}
+            src={player2.src}
+            alt={`${player.apodo}`}
+          />
+        </ListItemAvatar>
+        <ListItemText id={labelId} primary={player.apodo} />
+        <ToggleButtons player={player} />
+      </ListItemButton>
+    </ListItem>
   )
 }
 
 
-export function CheckboxListSecondary({players}) {
- 
+export function CheckboxListSecondary({ players }) {
+
   return (
-    <List dense sx={{ width: '100%', maxWidth: 660, flexGrow: 1, overflow: 'auto', bgcolor: 'background.paper', color: 'black', flex: '1 1 auto', overflowY: 'auto', minHeight: '100px'}}>
+    <List dense sx={{ width: '100%', maxWidth: 660, flexGrow: 1, overflow: 'auto', bgcolor: 'background.paper', color: 'black', flex: '1 1 auto', overflowY: 'auto', minHeight: '100px' }}>
       {players.map((value) => {
-        
+
         return (
-          <PlayerItem player={value}/>
+          <PlayerItem player={value} />
         );
       })}
     </List>
@@ -464,12 +487,12 @@ export function CheckboxListSecondary({players}) {
 
 
 
-export function ToggleButtons({player}) {
+export function ToggleButtons({ player }) {
   const [alignment, setAlignment] = React.useState(JSON.parse(player.posiciones)[0]);
   const posiciones = ['POR', 'DEF', 'MID', 'DEL', 'ARB'];
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
-    player.posiciones =  JSON.stringify([newAlignment]);
+    player.posiciones = JSON.stringify([newAlignment]);
   };
 
   return (
@@ -479,13 +502,13 @@ export function ToggleButtons({player}) {
       onChange={handleAlignment}
       aria-label="text alignment"
     >
-        {posiciones.map(posicion => {
-          return (
-            <ToggleButton sx={{padding: 0}} value={posicion}>
-              {posicion}
-            </ToggleButton>
-          )
-        })}
+      {posiciones.map(posicion => {
+        return (
+          <ToggleButton sx={{ padding: 0 }} value={posicion}>
+            {posicion}
+          </ToggleButton>
+        )
+      })}
     </ToggleButtonGroup>
   );
 }
