@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Logo from "../../public/football.png";
 console.log(Logo);
-export default function ButtonAppBar() {
+export default function ButtonAppBar({mode, setMode}) {
 
   const { user } = useUser();
   const [auth, setAuth] = React.useState(true);
@@ -30,6 +30,10 @@ export default function ButtonAppBar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const goToAdmin = () => {
+    setAnchorEl(null);
+    setMode('admin');
   };
   const handleLogout = () => {
     location.href = '/api/auth/logout';
@@ -76,8 +80,7 @@ export default function ButtonAppBar() {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={goToAdmin}>Administracion</MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </Menu>
                 </div>
