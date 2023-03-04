@@ -24,6 +24,9 @@ export default function Match({match}) {
         </ListSubheader>
       }
     >
+      <ListSubheader id="nested-list-subheader">
+          PORTERIA
+        </ListSubheader>
       {match.teams.blue.filter(player => {
         if (player.posiciones.indexOf('POR') !== -1) {
           return player
@@ -31,6 +34,9 @@ export default function Match({match}) {
         
       }).map((player)=> <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
       <Divider />
+      <ListSubheader id="nested-list-subheader">
+          DEFENSA
+        </ListSubheader>
       {match.teams.blue.filter(player => {
         if (player.posiciones.indexOf('DEF') !== -1) {
           return player
@@ -38,12 +44,18 @@ export default function Match({match}) {
         
       }).map((player)=> <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
       <Divider />
+      <ListSubheader id="nested-list-subheader">
+          MEDIO
+        </ListSubheader>
       {match.teams.blue.filter(player => {
         if (player.posiciones.indexOf('MID') !== -1) {
           return player
         }
         
       }).map((player)=> <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
+      <ListSubheader id="nested-list-subheader">
+          DELANTERA
+        </ListSubheader>
       <Divider />
       {match.teams.blue.filter(player => {
         if (player.posiciones.indexOf('DEL') !== -1) {
@@ -62,12 +74,18 @@ export default function Match({match}) {
         </ListSubheader>
       }
     >
+      <ListSubheader id="nested-list-subheader">
+          PORTERIA
+        </ListSubheader>
       {match.teams.red.filter(player => {
         if (player.posiciones.indexOf('POR') !== -1) {
           return player
         }
         
       }).map((player)=> <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
+      <ListSubheader id="nested-list-subheader">
+          DEFENSA
+        </ListSubheader>
       <Divider />
       {match.teams.red.filter(player => {
         if (player.posiciones.indexOf('DEF') !== -1) {
@@ -75,6 +93,9 @@ export default function Match({match}) {
         }
         
       }).map((player)=> <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
+      <ListSubheader id="nested-list-subheader">
+          MEDIO
+        </ListSubheader>
       <Divider />
       {match.teams.red.filter(player => {
         if (player.posiciones.indexOf('MID') !== -1) {
@@ -82,6 +103,9 @@ export default function Match({match}) {
         }
         
       }).map((player)=> <ListItem><ListItemText primary={player.apodo} /></ListItem>)}
+      <ListSubheader id="nested-list-subheader">
+          DELANTERA
+        </ListSubheader>
       <Divider />
       {match.teams.red.filter(player => {
         if (player.posiciones.indexOf('DEL') !== -1) {
