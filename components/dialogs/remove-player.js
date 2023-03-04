@@ -6,10 +6,17 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function RemovePlayerDialog({open, setOpen, player}) {
+export default function RemovePlayerDialog({open, setOpen, player, refresh, setRefresh}) {
   console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
   console.log(player);
   const handleClose = () => {
+    setOpen(false);
+  };
+  const handleRemovePlayer = async () => {
+    const remove = await fetch(`/api/${player.id}`, { method: 'DELETE' });
+    const response = await remove.json();
+    console.log(response);
+    setRefresh(!refresh);
     setOpen(false);
   };
   if (!player) {
@@ -33,7 +40,7 @@ export default function RemovePlayerDialog({open, setOpen, player}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={handleRemovePlayer} autoFocus>
             Eliminar
           </Button>
         </DialogActions>

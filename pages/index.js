@@ -217,6 +217,7 @@ export function AppContent({ mode, setMode }) {
   const [selectedPlayers, setSelectedPlayers] = React.useState(null);
   const [selectedPlayer, setSelectedPlayer] = React.useState(null);
   const [openRemove, setOpenRemove] = React.useState(false);
+  const [refresh, setRefresh] = React.useState(false);
   React.useEffect(() => {
 
     const fetchData = async () => {
@@ -229,7 +230,7 @@ export function AppContent({ mode, setMode }) {
     }
     fetchData()
       .catch(console.error);
-  }, []);
+  }, [refresh]);
 
   const generateTeams = async () => {
     const { match } = await GenerateMatch({ selectedPlayers });
@@ -380,12 +381,12 @@ export function AppContent({ mode, setMode }) {
        }
        {mode === 'admin' && 
         <Box sx={{ display: 'flex', flexFlow: 'column', padding: 0, flexGrow: 1 }}>
-          <PlayerListAdmin players={players} removeItemAction={openRemovePlayer}/>
+          <PlayerListAdmin  players={players} removeItemAction={openRemovePlayer}/>
           
         </Box>
       }
       </Container>
-      <RemovePlayerDialog open={openRemove} setOpen={setOpenRemove} player={selectedPlayer}  handleRemoveItem={removePlayer}></RemovePlayerDialog>
+      <RemovePlayerDialog setRefresh={setRefresh} refresh={refresh} open={openRemove} setOpen={setOpenRemove} player={selectedPlayer}  handleRemoveItem={removePlayer}></RemovePlayerDialog>
     </React.Fragment>
   )
 }
