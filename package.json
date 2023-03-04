@@ -4,7 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prinp": "nodemon --exec babel-node ./scripts/insert_players.js"
+    "prinp": "nodemon --exec babel-node ./scripts/insert_players.js",
+    "prinpn": "nodemon --exec babel-node ./scripts/insert_new_players.js"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.0.0",

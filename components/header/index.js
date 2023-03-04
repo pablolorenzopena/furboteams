@@ -35,6 +35,11 @@ export default function ButtonAppBar({mode, setMode}) {
     setAnchorEl(null);
     setMode('admin');
   };
+  const goToMatch = () => {
+    setAnchorEl(null);
+    setMode('match');
+  };
+  
   const handleLogout = () => {
     location.href = '/api/auth/logout';
   }
@@ -81,7 +86,8 @@ export default function ButtonAppBar({mode, setMode}) {
                     onClose={handleClose}
                   >
                     <MenuItem onClick={goToAdmin}>Administracion</MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    <MenuItem onClick={goToMatch}>Partido</MenuItem>
+                    <MenuItem onClick={handleLogout}>Salir</MenuItem>
                   </Menu>
                 </div>
                 ) : (
